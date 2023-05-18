@@ -3,16 +3,15 @@
 using namespace std;
 #define SIZE 1000
 
-using namespace std;
-
 class queue {
     int *arr;
     int capacity;
     int front;
     int rear;
     int count;
-public :
-    queue(int size=SIZE);
+
+public : 
+    queue(int size = SIZE);
     ~queue();
     int pop();
     void push(int x);
@@ -35,7 +34,7 @@ queue :: ~queue() {
 }
 
 int queue :: pop() {
-    if(isEmpty()){
+    if(isEmpty()) {
         cout<<"Underflow\n";
         exit(EXIT_FAILURE);
     }
@@ -45,7 +44,7 @@ int queue :: pop() {
     return x;
 }
 
-void queue :: push(int item) {
+ void queue :: push(int item) {
     if(isFull()) {
         cout<<"Overflow\n";
         exit(EXIT_FAILURE);
@@ -55,23 +54,68 @@ void queue :: push(int item) {
     count++;
 }
 
-int queue::peek() {
-    if(isEmpty()){
+int queue :: peek() {
+    if(isEmpty()) {
         cout<<"Underflow\n";
         exit(EXIT_FAILURE);
     }
     return arr[front];
 }
 
-int queue::size(){
+int queue :: size() {
     return count;
 }
 
-bool queue::isEmpty() {
+bool queue :: isEmpty() {
     return (size() == 0);
 }
 
-bool queue::isFull() {
+bool queue :: isFull() {
     return (size() == capacity);
 }
 
+void dfs(vector<vector<int>> &adjList, int src, vector<bool> &visited) {
+    cout<<src<<" ";
+    visited[src]=true;
+    for(int i=0; i<adjList[src].size(); i++) {
+        if(visited[adjList[src][i]] == false) {
+            dfs(adjList, adjList[src][i], visited);
+        }
+    }
+}
+
+
+
+int main()
+{
+    int v, e;
+    // Create a graph and initialize it 
+        cout<<"Enter the number of vertices in your graph: ";
+        cin>>v;
+        vector<vector<int>> adjList(v);
+        cout<<"Enter the number of edges: ";
+        cin>>e;
+        cout<<"Enter end vertices of each edges one by one below: "<<endl;
+        for(int i=0; i<e; i++) {
+            int v1, v2;
+            cout<<"edge "<<i<<": ";
+            cin>>v1>>v2;
+            adjList[v1].push_back(v2);
+            adjList[v2].push_back(v1);
+        }
+        
+    // get the source node for dfs and bfs traversal
+        int src;
+        cout<<"Enter the source node: ";
+        cin>>src;
+    // Display dfs traversal
+    vector<bool> visited(v, false);
+        cout<<"DFS traversal is: ";
+        dfs(adjList, src, visited);
+        cout<<endl;
+    // Display bfs traversal
+        // cout<<"BFS traversal is: ";
+        // bfs(adjList, src);
+        // cout<<endl;
+    return 0;
+}
