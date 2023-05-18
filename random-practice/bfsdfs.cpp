@@ -84,7 +84,24 @@ void dfs(vector<vector<int>> &adjList, int src, vector<bool> &visited) {
     }
 }
 
-
+void bfs(vector<vector<int>> &adjList, int src) {
+    queue next;
+    next.push(src);
+    int v = adjList.size();
+    vector<bool> visited(v, false);
+    visited[src] = true;
+    while(next.isEmpty() == false) {
+        int curr = next.peek();
+        next.pop();
+        cout<<curr<<" ";
+        for(int i=0; i<adjList[src].size(); i++) {
+            if(visited[adjList[src][i]] == false) {
+                next.push(adjList[src][i]);
+                visited[adjList[src][i]] = true;
+            }
+        }
+    }
+}
 
 int main()
 {
@@ -113,9 +130,9 @@ int main()
         cout<<"DFS traversal is: ";
         dfs(adjList, src, visited);
         cout<<endl;
-    // Display bfs traversal
-        // cout<<"BFS traversal is: ";
-        // bfs(adjList, src);
-        // cout<<endl;
+    //Display bfs traversal
+        cout<<"BFS traversal is: ";
+        bfs(adjList, src);
+        cout<<endl;
     return 0;
 }
