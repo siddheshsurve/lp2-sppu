@@ -1,73 +1,111 @@
-#include <bits/std++.h>
+#include <bits/stdc++.h>
+
 using namespace std;
+#define MAX 20
 
-#define size 1000
+class Graph {
+    int adj[MAX][MAX];
+    int n;
 
-class queue {
-    int *arr;
-    int capacity;
-    int front;
-    int rear;
-    int count;
 public :
-    queue(size = SIZE);
-    ~queue()
-
-    int pop();
-    void push(int x);
-    int front();
-    int size();
-    bool empty();
-    bool full();
-}
-
-queue :: queue(int size) {
-    arr = new int[size];
-    capacity = size;
-    front = 0;
-    rear = -1;
-    count = 0;
-} 
-
-queue :: ~queue() {
-    delete[] arr;
-}
-
-int queue :: pop() {
-    if(empty()) {
-        cout<<"UnderFlow\n";
+    Graph(int x) {
+        n = x;
+        for(int i=0; i<x; i++) {
+            for(int j=0; j<x; j++) {
+                adj[i][j] = 0;
+            }
+        }
     }
-    int x = arr[front];
-    front = (front+1)%capacity;
-    count--;
-    return x;
-}
 
-void queue :: push(int item) {
-    if(full()) {
-        cout<<"OverFlow\n";
+    void addEdge(int a, int b) {
+        adj[a][b] = 1;
+        adj[b][a] = 1;
+        cout<<"Edge added successfully !\n";
     }
-    rear = (rear+1)%capacity;
-    arr[rear] = item;
-    count++;
-}
 
-int queue :: front() {
-    if(empty()) {
-        cout<<"UnderFlow\n";
-    } 
-    return arr[front];
-}
+    void show() {
+        for(int i=0; i<n; i++) {
+            for(int j=0; i<n; j++) {
+                cout<<adj[i][j]<<" ";
+            }
+            cout<<"\n";
+        }
+    }
+     
+    void dfs(int src, vector<bool>&visited) {
+        visited[src] = true;
+        cout<<src<<" ";
+        for(int i=0; i<n; i++) {
+            if((adj[src][i] == 1) && (!visited[i])) {
+                dfs(i, visited);
+            }
+        }
+    }
 
-int queue :: size() {
-    return count;
-}
+    void bfs(queue<int>&q, vector<bool>&visited) {
+        if(q.empty()) {
+            return;
+        }
+        int v = q.front();
+        q.pop();
+        cout<<v<<" ";
+        for(int i=0; i<n; i++) {
+            if((adj[v][i] == 1) && (!visited[i])) {
+                visited[i] = true;
+                q.push(i);
+            }
+        }
+        bfs(q, visited);
+    }
+};
 
-bool queue :: empty() {
-    return(size() == 0)
-}
+int main() {
+    int a=0,b=0,c=0,d=0,e=0;
+    cout<<"--------- DFS bfs code-------\n";
+    cout<<"Enter the number of vertice in graph : \n";
+    cin>>a;
+    vector<bool> visitedDFS(a, false);
+    vector<bool> visited(a, false);
+    Graph g(a);
 
-bool queue :: full() {
-    return(size() == capacity)
-}
 
+    while(true) {
+        cout<<"\n=====Menu=====\n1. Add Edge\n2. Adjacency Matrix\n3. DFS\n4. BFS\nEnter choice : ";
+        cin>>b;
+        switch(b) {
+            case 1 :
+                cout<<"Enter first vertex of (0-"<<a-1<<") : ";
+                cin>>c;
+                cout<<"Enter second vertex of (0"<<a-1<<") : ";
+                cin>>d;
+                g.addEdge(c,d);
+                break;
+            case 2:
+                g.show();
+                break;
+            case 3:
+                for(int i=0; i<a; i++) {
+                    visitedDFS[i] = false;
+                } 
+                cout<<"Enter source node : ";
+                cin>>e;
+                cout<<"DFS : \n";
+                g.dfs(e, visitedDFS);
+                break;
+            case 4:
+                for(int i=0; i<a; i++) {
+                    visited[i] = false;
+                }
+                
+                queue<int> q;
+                cout<<"Enter source node : ";
+                cin>>e;
+                visited[e] = true;
+                cout<<"BFS : \n";
+                q.push(e);
+                g.bfs(q, visited);
+                break;
+        }
+    }
+    return 0;
+}
