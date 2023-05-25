@@ -5,7 +5,7 @@ using namespace std;
 class Graph {
     int adj[MAX][MAX];
     int n;
-public :
+public : 
     Graph(int x) {
         n = x;
         for(int i=0; i<x; i++) {
@@ -18,7 +18,7 @@ public :
     void addEdge(int a, int b) {
         adj[a][b] = 1;
         adj[b][a] = 1;
-        cout<<"Edge added successfull !\n";
+        cout<<"Edge added successfully !\n";
     }
 
     void show() {
@@ -30,17 +30,17 @@ public :
         }
     }
 
-    void dfs(int src, vector<bool>&visited) {
+    void DFS(int src, vector<bool>&visited) {
         visited[src] = true;
         cout<<src<<" ";
         for(int i=0; i<n; i++) {
-            if((adj[src][i] == 1) && (!visited[i])) {
-                dfs(i, visited);
+            if((adj[src][i]) == 1 && (!visited[i])) {
+                DFS(i, visited);
             }
-        }
+        } 
     }
 
-    void bfs(queue<int>&q, vector<bool>&visited) {
+    void BFS(queue<int>&q, vector<bool>&visited) {
         if(q.empty()) {
             return;
         }
@@ -48,58 +48,57 @@ public :
         q.pop();
         cout<<v<<" ";
         for(int i=0; i<n; i++) {
-            if((adj[v][i] == 1) && (!visited[i])) {
+            if((adj[v][i]) == 1 && (!visited[i])) {
                 visited[i] = true;
                 q.push(i);
             }
         }
-        bfs(q, visited);
+        BFS(q, visited);
     }
 };
 
 int main() {
-    cout<<"---------- DFS BFS of GRAPH ----------\n\n";
+    cout<<"= = = = DFS BFS of GRAPH = = = =\n";
     int a,b,c,d,e;
-    cout<<"Enter number of vertices in your graph : ";
+    cout<<"Enter no of vertex : ";
     cin>>a;
     vector<bool> visitedDFS(a, false);
     vector<bool> visited(a, false);
     Graph g(a);
 
     while(true) {
-        cout<<"\n----- MENU -----\n1. Add edge\n2. Adjacency Matrix\n3. DFS\n4. BFS\nEnter choice : ";
+        cout<<"\n= = = MENU = = =\n1. Add Edge\n2. Adjacency Matrix\n3. DFS\n4. BFS\nEnter choice : ";
         cin>>b;
         switch(b) {
             case 1 :
-                cout<<"Enter first vertex (0-"<<a-1<<") : ";
+                cout<<"Enter first vertex : ";
                 cin>>c;
-                cout<<"Enter second vertex (0-"<<a-1<<") : ";
+                cout<<"Enter second vertex : ";
                 cin>>d;
-                g.addEdge(c, d);
+                g.addEdge(c,d);
                 break;
-            case 2 : 
+            case 2 :
                 g.show();
                 break;
-            case 3 : 
-                for(int i=0; i<a; i++) {
+            case 3 :
+                for(int i=0;i<a; i++) {
                     visitedDFS[i] = false;
                 }
                 cout<<"Enter source node : ";
                 cin>>e;
                 cout<<"DFS : \n";
-                g.dfs(e, visitedDFS);
+                g.DFS(e, visitedDFS);
                 break;
-            case 4 : 
+            case 4 :
                 for(int i=0; i<a; i++) {
                     visited[i] = false;
                 }
                 queue<int> q;
-                visited[e] = true;
                 cout<<"Enter source node : ";
                 cin>>e;
+                visited[e] = true;
                 q.push(e);
-                cout<<"BFS : \n";
-                g.bfs(q, visited);
+                g.BFS(q, visited);
                 break;
         }
     }
