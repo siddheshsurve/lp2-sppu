@@ -1,7 +1,81 @@
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
 
+#define SIZE 1000
 #define MAX 20
+
+class queue {
+    int *arr;
+    int capacity;
+    int front;
+    int rear;
+    int count;
+public: 
+    queue(int size = SIZE);
+    ~queue();
+
+    int pop();
+    void push(int x);
+    int peek();
+    int size();
+    bool isEmpty();
+    bool isFull();
+};
+
+queue::queue(int size) {
+    arr = new int[size];
+    capacity = size;
+    front = 0;
+    rear = -1;
+    count = 0;
+}
+
+queue::~queue(){
+    delete[] arr;
+}
+
+int queue::pop() {
+    if(isEmpty()) {
+        cout<<"UnderFlow";
+        exit(EXIT_FAILURE);
+    }
+    int x = arr[front];
+    front = (front+1)%capacity;
+    count--;
+    return x;
+}
+
+void queue::push(int item) {
+    if(isFull()) {
+        cout<<"OverFlow";
+        exit(EXIT_FAILURE);
+    }
+    rear = (rear+1)%capacity;
+    arr[rear] = item;
+    count++;
+}
+
+int queue::peek() {
+    if(isEmpty()) {
+        cout<<"UnderFlow";
+        exit(EXIT_FAILURE);
+    }
+    return arr[front];
+}
+
+int queue::size() {
+    return count;
+}
+
+bool queue::isEmpty() {
+    return(size() == 0);
+}
+
+bool queue::isFull() {
+    return(size() == capacity);
+}
 
 class Graph {
     int adj[MAX][MAX];
@@ -41,11 +115,11 @@ public :
         } 
     }
 
-    void BFS(queue<int>&q, vector<bool>&visited) {
-        if(q.empty()) {
+    void BFS(queue &q, vector<bool>&visited) {
+        if(q.isEmpty()) {
             return;
         }
-        int v = q.front();
+        int v = q.peek();
         q.pop();
         cout<<v<<" ";
         for(int i=0; i<n; i++) {
@@ -66,6 +140,7 @@ int main() {
     vector<bool> visitedDFS(a, false);
     vector<bool> visited(a, false);
     Graph g(a);
+    queue q;
 
     while(true) {
         cout<<"\n= = = MENU = = =\n1. Add Edge\n2. Adjacency Matrix\n3. DFS\n4. BFS\nEnter choice : ";
@@ -94,7 +169,7 @@ int main() {
                 for(int i=0; i<a; i++) {
                     visited[i] = false;
                 }
-                queue<int> q;
+
                 cout<<"Enter source node : ";
                 cin>>e;
                 visited[e] = true;
